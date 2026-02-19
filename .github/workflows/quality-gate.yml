@@ -74,6 +74,14 @@ jobs:
               env:
                   SONAR_TOKEN: ${{ secrets.SONARCLOUD }}
 
+            - name: Create DB schema for E2E
+              run: |
+                  PGPASSWORD=postgres psql -h localhost -U postgres -d movies -c "
+                  CREATE TABLE IF NOT EXISTS movies (
+                    id SERIAL PRIMARY KEY,
+                    title VARCHAR DEFAULT NULL
+                  );"
+
             - name: E2E / Contract tests
               run: npm run test:e2e
 
